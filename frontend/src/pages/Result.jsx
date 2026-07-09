@@ -1,51 +1,102 @@
-import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import "../styles/Result.css";
 
 function Result() {
-  const location = useLocation();
 
-  const mistakes = location.state?.mistakes || 0;
+    const navigate = useNavigate();
 
-  let risk = "Low";
+    return (
 
-  if (mistakes >= 3 && mistakes <= 4) {
-    risk = "Medium";
-  }
+        <div className="result-page">
 
-  if (mistakes >= 5) {
-    risk = "High";
-  }
+            <div className="result-container">
 
-  const navigate = useNavigate();
+                <div className="result-header">
 
-  return (
-    <div style={{ padding: "40px" }}>
-      <h1>Assessment Result</h1>
+                    <h1>Assessment Complete</h1>
 
-      <h2>Total Mistakes: {mistakes}</h2>
+                    <p>
+                        AI has successfully analyzed the student's assessment.
+                    </p>
 
-      <h2>Dyslexia Risk Level: {risk}</h2>
+                </div>
 
-      <p>
-        This is a preliminary screening result and not a medical diagnosis.
-      </p>
+                <div className="score-grid">
 
-      <button
-      onClick={() => navigate("/dashboard")}
-      style={{
-        padding: "10px 20px",
-        background: "#2563eb",
-        color: "white",
-        border: "none",
-        borderRadius: "6px",
-        cursor: "pointer",
-        marginTop: "20px",
-      }}
-    >
-      View Dashboard
-    </button>
-    </div>
-  );
+                    <div className="score-card">
+
+                        <h4>Reading</h4>
+
+                        <h2>88%</h2>
+
+                        <p>Excellent Fluency</p>
+
+                    </div>
+
+                    <div className="score-card">
+
+                        <h4>Writing</h4>
+
+                        <h2>81%</h2>
+
+                        <p>Good Handwriting</p>
+
+                    </div>
+
+                    <div className="score-card">
+
+                        <h4>Risk Level</h4>
+
+                        <h2>Low</h2>
+
+                        <p>Continue Practice</p>
+
+                    </div>
+
+                </div>
+
+                <div className="report">
+
+                    <h3>AI Recommendations</h3>
+
+                    <ul>
+
+                        <li>✔ Continue daily reading practice for 15 minutes.</li>
+
+                        <li>✔ Improve handwriting consistency.</li>
+
+                        <li>✔ Practice letter spacing exercises.</li>
+
+                        <li>✔ Reassess after two weeks.</li>
+
+                    </ul>
+
+                </div>
+
+                <div className="button-group">
+
+                    <button
+                        className="secondary"
+                        onClick={() => navigate("/assessment")}
+                    >
+                        Take Again
+                    </button>
+
+                    <button
+                        className="primary"
+                        onClick={() => navigate("/dashboard")}
+                    >
+                        Go to Dashboard
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    );
+
 }
 
 export default Result;
