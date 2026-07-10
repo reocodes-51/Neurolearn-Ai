@@ -1,6 +1,7 @@
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const studentRoutes = require("./routes/studentRoutes");
+const assessmentRoutes = require("./routes/assessmentRoutes");
 
 dotenv.config();
 connectDB();
@@ -15,6 +16,9 @@ app.use(express.json());
 
 // Student Routes
 app.use("/api/students", studentRoutes);
+
+// Assessment Routes
+app.use("/api/assessments", assessmentRoutes);
 
 app.get("/", (req, res) => {
   res.send("NeuroLearn API Running");
