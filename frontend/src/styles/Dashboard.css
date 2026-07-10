@@ -1,0 +1,143 @@
+.dashboard-page {
+  min-height: 100vh;
+  background: #f5f7fb;
+  padding: 40px 20px;
+}
+
+.dashboard-container {
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* Header */
+
+.dashboard-header {
+  margin-bottom: 40px;
+}
+
+.dashboard-header h1 {
+  font-size: 36px;
+  color: #111827;
+  margin-bottom: 10px;
+}
+
+.dashboard-header p {
+  font-size: 18px;
+  color: #6b7280;
+}
+
+/* Statistics */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+  margin-bottom: 40px;
+}
+
+/* Dashboard Cards */
+
+.dashboard-card {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.dashboard-card h2 {
+  color: #2563eb;
+  margin-bottom: 20px;
+}
+
+/* Student Information */
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+}
+
+.info-grid strong {
+  display: block;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.info-grid p {
+  color: #6b7280;
+}
+
+/* Recommendations */
+
+.recommendation-list {
+  padding-left: 20px;
+}
+
+.recommendation-list li {
+  margin-bottom: 15px;
+  line-height: 1.8;
+  color: #374151;
+}
+
+/* Quick Actions */
+
+.action-buttons {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Responsive */
+
+@media (max-width: 992px) {
+
+  .dashboard-header h1 {
+    font-size: 30px;
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .dashboard-page {
+    padding: 30px 15px;
+  }
+
+  .dashboard-header h1 {
+    font-size: 28px;
+  }
+
+  .dashboard-header p {
+    font-size: 16px;
+  }
+
+  .dashboard-card {
+    padding: 25px;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .dashboard-page {
+    padding: 20px 10px;
+  }
+
+  .dashboard-header h1 {
+    font-size: 24px;
+  }
+
+  .dashboard-header p {
+    font-size: 15px;
+  }
+
+  .dashboard-card {
+    padding: 20px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+}

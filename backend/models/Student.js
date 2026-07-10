@@ -6,9 +6,31 @@ const studentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    age: Number,
-    school: String,
-    className: String,
+
+    age: {
+      type: Number,
+      required: true,
+    },
+
+    gender: {
+      type: String,
+      required: true,
+    },
+
+    school: {
+      type: String,
+      required: true,
+    },
+
+    className: {
+      type: String,
+      required: true,
+    },
+
+    language: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,
