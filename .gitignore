@@ -10,3 +10,14 @@ build/
 datasets/
 model-training/dataset/images/
 model-training/dataset/training_data.csv
+
+datasets/
+model-training/dataset/
+model-training/models/
+*.zip
+*.pkl
+.venv/
+ai-service/venv/
+backend/node_modules/
+frontend/node_modules/
+backend/.env
