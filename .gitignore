@@ -5,3 +5,8 @@ frontend/node_modules/
 .env
 dist/
 build/
+
+# Datasets
+datasets/
+model-training/dataset/images/
+model-training/dataset/training_data.csv

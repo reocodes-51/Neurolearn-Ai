@@ -3,9 +3,10 @@ from utils.image_processing import preprocess_image
 from utils.feature_extraction import extract_features
 from utils.text_analysis import analyze_text
 from utils.ocr import extract_text
-import shutil
-import os\
+from utils.csv_logger import save_training_data
 
+import shutil
+import os
 
 app = FastAPI(
     title="NeuroLearn AI Service",
@@ -13,7 +14,6 @@ app = FastAPI(
 )
 
 UPLOAD_FOLDER = "temp_uploads"
-
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
@@ -27,30 +27,43 @@ def home():
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
+    try:
+        # Save uploaded image
+        file_path = os.path.join(UPLOAD_FOLDER, file.filename)
 
-    file_path = os.path.join(UPLOAD_FOLDER, file.filename)
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
 
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+        # Image preprocessing
+        processed_image = preprocess_image(file_path)
 
-    processed_image = preprocess_image(file_path)
-    features = extract_features(processed_image)
-    text = extract_text(file_path)
-    analysis = analyze_text(text)
+        # Feature extraction
+        features = extract_features(processed_image)
 
-    print(analysis)
+        # OCR
+        text = extract_text(file_path)
 
-    print("Extracted Text:")
-    print(text)
+        # Text analysis
+        analysis = analyze_text(text)
 
-    print(features)
+        # Save extracted features to CSV
+        save_training_data(analysis, features)
 
-    print("✅ Image Processed Successfully")
+        print("✅ Training data saved.")
+        print("Extracted Text:", text)
+        print("Analysis:", analysis)
+        print("Features:", features)
 
-    return {
-    "success": True,
-    "filename": file.filename,
-    "ocrText": text,
-    "analysis": analysis,
-    "features": features
-}
+        return {
+            "success": True,
+            "filename": file.filename,
+            "ocrText": text,
+            "analysis": analysis,
+            "features": features
+        }
+
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e)
+        }
