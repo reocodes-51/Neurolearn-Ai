@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import "../styles/Register.css";
+import API from "../services/api";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
 
@@ -22,14 +24,43 @@ function Register() {
       [e.target.name]: e.target.value,
     });
   };
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    console.log(formData);
+  if (formData.password !== formData.confirmPassword) {
+    alert("Passwords do not match.");
+    return;
+  }
 
-    alert("Registration functionality will be added next.");
-  };
+  try {
+    const response = await API.post("/students", {
+      name: formData.name,
+      age: formData.age,
+      gender: formData.gender,
+      school: formData.school,
+      className: formData.className,
+      language: formData.language,
+      email: formData.email,
+      password: formData.password,
+    });
+
+    alert(response.data.message);
+
+    navigate("/login");
+
+  } catch (error) {
+
+    if (error.response) {
+      alert(error.response.data.message);
+    } else {
+      alert("Registration failed.");
+    }
+
+    console.error(error);
+  }
+};
 
   return (
     <div className="register-page">
