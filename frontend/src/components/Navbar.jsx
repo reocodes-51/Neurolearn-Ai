@@ -1,9 +1,12 @@
+import { Link } from "react-router-dom";
+
 function Navbar() {
   return (
     <nav
       style={{
         display: "flex",
         justifyContent: "space-between",
+        alignItems: "center",
         padding: "20px 50px",
         background: "#2563eb",
         color: "white",
@@ -11,11 +14,16 @@ function Navbar() {
     >
       <h2>NeuroLearn AI</h2>
 
-      <div>
-        <span style={{ marginRight: "20px" }}>Home</span>
-        <span style={{ marginRight: "20px" }}>Assessment</span>
-        <span>Dashboard</span>
-      </div>
+      <Link
+        to="/dashboard"
+        style={{
+          color: "white",
+          textDecoration: "none",
+          fontWeight: "600",
+        }}
+      >
+        Dashboard
+      </Link>
     </nav>
   );
 }

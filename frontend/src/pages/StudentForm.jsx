@@ -45,7 +45,7 @@ function StudentForm() {
 
       alert("Student Registered Successfully");
 
-      navigate("/reading");
+      navigate("/assessment");
     } catch (error) {
       console.error(error);
 

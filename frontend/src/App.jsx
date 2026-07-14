@@ -1,42 +1,42 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import StudentForm from "./pages/StudentForm";
-import ReadingAssessment from "./pages/ReadingAssessment";
+
 import Home from "./pages/Home";
+import StudentForm from "./pages/StudentForm";
 import Assessment from "./pages/Assessment";
-import Result from "./pages/Result";
-import Dashboard from "./pages/Dashboard";
+import ReadingAssessment from "./pages/ReadingAssessment";
 import WritingAssessment from "./pages/WritingAssessment";
 import Processing from "./pages/Processing";
-
+import Result from "./pages/Result";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Home */}
         <Route path="/" element={<Home />} />
-        <Route path="/assessment" element={<Assessment />} />
-        <Route path="/result" element={<Result />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+
+        {/* Student Registration */}
         <Route path="/register" element={<StudentForm />} />
-            <Route
-          path="/reading"
-          element={<ReadingAssessment />}
-          />
 
-          <Route
-        path="/writing"
-        element={<WritingAssessment />}
-      />
+        {/* Assessment */}
+        <Route path="/assessment" element={<Assessment />} />
 
-      <Route path="/writing" element={<WritingAssessment />} />
-      <Route path="/result" element={<Result />} />
-      <Route path="/assessment" element={<StudentForm />} />
+        {/* Reading Assessment */}
+        <Route path="/reading" element={<ReadingAssessment />} />
 
-      <Route path="/reading" element={<ReadingAssessment />} />
+        {/* Writing Assessment */}
+        <Route path="/writing" element={<WritingAssessment />} />
 
-      <Route path="/writing" element={<WritingAssessment />} />
-      <Route path="/processing" element={<Processing />} />
-        </Routes>
+        {/* AI Processing */}
+        <Route path="/processing" element={<Processing />} />
+
+        {/* Results */}
+        <Route path="/result" element={<Result />} />
+
+        {/* Dashboard */}
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
     </BrowserRouter>
   );
 }
