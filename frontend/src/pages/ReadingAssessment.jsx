@@ -1,67 +1,219 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/ReadingAssessment.css";
-import ProgressBar from "../components/common/ProgressBar";
-import Button from "../components/common/Button";
+import { AI_API } from "../services/api";
 
 function ReadingAssessment() {
   const navigate = useNavigate();
 
+  const student = JSON.parse(localStorage.getItem("student"));
+
+  const [transcript, setTranscript] = useState("");
+  const [analysis, setAnalysis] = useState(null);
+
   const paragraph = `
-The little rabbit ran through the green forest looking for its friends.
-It jumped over small rocks, crossed a tiny stream, and finally found
-everyone playing happily under a big tree.
+The quick brown fox jumps over the lazy dog.
+Reading every day improves vocabulary, pronunciation,
+and confidence. Practice makes learning easier.
 `;
+
+  // ===========================
+  // Start Recording
+  // ===========================
+  const startRecording = () => {
+    const SpeechRecognition =
+      window.SpeechRecognition ||
+      window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      alert("Speech Recognition is not supported in this browser.");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+
+    recognition.lang = "en-US";
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    recognition.onresult = (event) => {
+      let text = "";
+
+      for (let i = 0; i < event.results.length; i++) {
+        text += event.results[i][0].transcript + " ";
+      }
+
+      setTranscript(text);
+    };
+
+    recognition.onerror = (event) => {
+      console.log(event.error);
+    };
+
+    recognition.start();
+
+    window.recognition = recognition;
+  };
+
+  // ===========================
+  // Stop Recording
+  // ===========================
+  const stopRecording = async () => {
+  if (window.recognition) {
+    window.recognition.stop();
+  }
+
+  console.log("Transcript:", transcript);
+
+  try {
+    const response = await AI_API.post("/analyze-reading", {
+      text: transcript.trim(),
+    });
+
+    console.log("SUCCESS");
+    console.log(response.data);
+
+    setAnalysis(response.data.analysis);
+
+    localStorage.setItem(
+      "readingAnalysis",
+      JSON.stringify(response.data.analysis)
+    );
+
+  } catch (error) {
+    console.log("========== ERROR ==========");
+    console.log(error);
+    console.log("Status:", error.response?.status);
+    console.log("Data:", error.response?.data);
+    console.log("Message:", error.message);
+  }
+};
+  // ===========================
+  // Next Page
+  // ===========================
+  const handleNext = () => {
+    if (!analysis) {
+      alert("Please complete the reading assessment first.");
+      return;
+    }
+
+    navigate("/writing");
+  };
 
   return (
     <div className="reading-page">
-      <div className="reading-container">
+      <div className="reading-card">
 
-        <ProgressBar
-          step={2}
-          totalSteps={4}
-        />
+        <h1>📖 Reading Assessment</h1>
 
-        <h1>Reading Assessment</h1>
-
-        <p className="instruction">
-          Read the paragraph below clearly and confidently.
+        <p className="welcome">
+          Welcome, <strong>{student?.name}</strong>
         </p>
 
-        <div className="reading-card">
+        {/* Progress */}
+
+        <div className="progress">
+          <div className="progress-fill"></div>
+        </div>
+
+        <p className="step">
+          Step 2 of 4
+        </p>
+
+        {/* Instructions */}
+
+        <div className="instruction-box">
+
+          <h3>Instructions</h3>
+
+          <ul>
+            <li>Read the paragraph clearly.</li>
+            <li>Speak naturally.</li>
+            <li>Allow microphone permission.</li>
+            <li>Click Start Recording.</li>
+          </ul>
+
+        </div>
+
+        {/* Reading Passage */}
+
+        <div className="paragraph-box">
+
+          <h3>Reading Passage</h3>
+
           <p>{paragraph}</p>
-        </div>
-
-        <div className="record-buttons">
-
-          <Button
-            text="🎤 Start Recording"
-            variant="primary"
-            onClick={() => alert("Recording feature will be added later")}
-          />
-
-          <Button
-            text="📁 Upload Audio"
-            variant="secondary"
-            onClick={() => alert("Upload feature will be added later")}
-          />
 
         </div>
 
-        <div className="navigation">
+        {/* Buttons */}
 
-          <Button
-            text="← Back"
-            variant="secondary"
-            onClick={() => navigate("/assessment")}
-          />
+        <div className="button-group">
 
-          <Button
-            text="Next →"
-            variant="primary"
-            onClick={() => navigate("/writing")}
+          <button
+            className="start-btn"
+            onClick={startRecording}
+          >
+            🎤 Start Recording
+          </button>
+
+          <button
+            className="stop-btn"
+            onClick={stopRecording}
+          >
+            ⏹ Stop Recording
+          </button>
+
+        </div>
+
+        {/* Transcript */}
+
+        <div className="transcript-box">
+
+          <h3>Live Transcript</h3>
+
+          <textarea
+            value={transcript}
+            readOnly
+            placeholder="Your speech will appear here..."
           />
 
         </div>
+
+        {/* Reading Analysis */}
+
+        {analysis && (
+
+          <div className="analysis-box">
+
+            <h3>📊 Reading Analysis</h3>
+
+            <p>
+              <strong>Accuracy :</strong>{" "}
+              {analysis.accuracy}%
+            </p>
+
+            <p>
+              <strong>Missing Words :</strong>{" "}
+              {analysis.missingWords.length}
+            </p>
+
+            <p>
+              <strong>Extra Words :</strong>{" "}
+              {analysis.extraWords.length}
+            </p>
+
+          </div>
+
+        )}
+
+        {/* Next */}
+
+        <button
+          className="next-btn"
+          onClick={handleNext}
+        >
+          Next → Writing Assessment
+        </button>
 
       </div>
     </div>
