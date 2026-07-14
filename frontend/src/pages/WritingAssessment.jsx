@@ -1,84 +1,96 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/WritingAssessment.css";
-import ProgressBar from "../components/common/ProgressBar";
-import Button from "../components/common/Button";
-import API from "../services/api";
+import { AI_API } from "../services/api";
 
 function WritingAssessment() {
   const navigate = useNavigate();
 
   const [image, setImage] = useState(null);
-  const [uploading, setUploading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleImage = async (e) => {
-    const file = e.target.files[0];
+  const paragraph = `
+The quick brown fox jumps over the lazy dog.
+Reading every day improves vocabulary, pronunciation,
+and confidence. Practice makes learning easier.
+`;
 
-    if (!file) return;
+  const handleImage = (e) => {
+    setImage(e.target.files[0]);
+  };
 
-    // Preview Image
-    setImage(URL.createObjectURL(file));
+  const handleSubmit = async () => {
+    if (!image) {
+      alert("Please upload an image.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", image);
 
     try {
-      setUploading(true);
+      setLoading(true);
 
-      const formData = new FormData();
-
-      formData.append("image", file);
-
-      const response = await API.post(
-        "/upload/image",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      console.log("Image Uploaded Successfully");
+      const response = await AI_API.post("/predict", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       console.log(response.data);
 
-      // Store uploaded image filename
       localStorage.setItem(
-        "handwritingImage",
-        response.data.file.filename
+        "prediction",
+        JSON.stringify(response.data)
       );
 
-      alert("Image Uploaded Successfully!");
+      navigate("/result");
 
     } catch (error) {
       console.error(error);
-
-      alert("Image Upload Failed");
+      alert("Prediction Failed");
     } finally {
-      setUploading(false);
+      setLoading(false);
     }
   };
 
   return (
     <div className="writing-page">
-      <div className="writing-container">
 
-        <ProgressBar
-          step={3}
-          totalSteps={4}
-        />
+      <div className="writing-card">
 
-        <h1>Writing Assessment</h1>
+        <h1>✍ Writing Assessment</h1>
 
-        <p className="instruction">
-          Write the sentence below on paper and upload a clear image.
+        <div className="progress">
+          <div className="progress-fill"></div>
+        </div>
+
+        <p className="step">
+          Step 3 of 4
         </p>
 
-        <div className="sentence-box">
-          The quick brown fox jumps over the lazy dog.
+        <div className="instruction-box">
+
+          <h3>Instructions</h3>
+
+          <ul>
+            <li>Write the paragraph neatly on paper.</li>
+            <li>Take a clear image.</li>
+            <li>Upload the image.</li>
+            <li>Click Submit.</li>
+          </ul>
+
+        </div>
+
+        <div className="paragraph-box">
+
+          <h3>Writing Passage</h3>
+
+          <p>{paragraph}</p>
+
         </div>
 
         <div className="upload-box">
-
-          <h3>Upload Handwriting Image</h3>
 
           <input
             type="file"
@@ -86,44 +98,33 @@ function WritingAssessment() {
             onChange={handleImage}
           />
 
-          {uploading && (
-            <p style={{ marginTop: "15px", color: "#2563eb" }}>
-              Uploading image...
-            </p>
-          )}
-
         </div>
 
         {image && (
+
           <div className="preview">
 
             <h3>Preview</h3>
 
             <img
-              src={image}
-              alt="Handwriting Preview"
+              src={URL.createObjectURL(image)}
+              alt="preview"
             />
 
           </div>
+
         )}
 
-        <div className="navigation">
-
-          <Button
-            text="← Back"
-            variant="secondary"
-            onClick={() => navigate("/reading")}
-          />
-
-          <Button
-            text="Analyze →"
-            variant="primary"
-            onClick={() => navigate("/processing")}
-          />
-
-        </div>
+        <button
+          className="submit-btn"
+          onClick={handleSubmit}
+          disabled={loading}
+        >
+          {loading ? "Analyzing..." : "Submit for AI Analysis"}
+        </button>
 
       </div>
+
     </div>
   );
 }
