@@ -4,6 +4,7 @@ from utils.feature_extraction import extract_features
 from utils.text_analysis import analyze_text
 from utils.ocr import extract_text
 from utils.csv_logger import save_training_data
+from utils.model import predict_risk
 
 import shutil
 import os
@@ -46,6 +47,15 @@ async def predict(file: UploadFile = File(...)):
         # Text analysis
         analysis = analyze_text(text)
 
+        try:
+            prediction = predict_risk(features, analysis)
+        except Exception as e:
+            print("Model Prediction Error:", e)
+            prediction = {
+                "riskLevel": "Unknown",
+                "confidence": 0
+        }
+
         # Save extracted features to CSV
         save_training_data(analysis, features)
 
@@ -55,12 +65,13 @@ async def predict(file: UploadFile = File(...)):
         print("Features:", features)
 
         return {
-            "success": True,
-            "filename": file.filename,
-            "ocrText": text,
-            "analysis": analysis,
-            "features": features
-        }
+    "success": True,
+    "filename": file.filename,
+    "ocrText": text,
+    "analysis": analysis,
+    "features": features,
+    "prediction": prediction
+    }
 
     except Exception as e:
         return {

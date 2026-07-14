@@ -2,6 +2,7 @@ import os
 import joblib
 import pandas as pd
 
+# Get project root
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 MODEL_PATH = os.path.abspath(
@@ -14,10 +15,12 @@ MODEL_PATH = os.path.abspath(
     )
 )
 
+# Load trained model
 model = joblib.load(MODEL_PATH)
 
 
 def predict_risk(features, analysis):
+
     data = pd.DataFrame([{
         "ocr_accuracy": analysis["accuracy"],
         "missing_words": len(analysis["missingWords"]),
