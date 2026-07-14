@@ -1,0 +1,90 @@
+.register-page{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#dbeafe,#eff6ff,#ffffff);
+    padding:40px;
+}
+
+.register-card{
+    width:650px;
+    background:white;
+    padding:40px;
+    border-radius:18px;
+    box-shadow:0 10px 30px rgba(0,0,0,.12);
+}
+
+.register-card h1{
+    text-align:center;
+    color:#2563eb;
+}
+
+.register-card h2{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.form-grid input,
+.form-grid select{
+    padding:12px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    font-size:15px;
+}
+
+.form-grid input:focus,
+.form-grid select:focus{
+    outline:none;
+    border-color:#2563eb;
+}
+
+.register-btn{
+    width:100%;
+    margin-top:30px;
+    padding:14px;
+    background:#2563eb;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+.register-btn:hover{
+    background:#1d4ed8;
+}
+
+.login-link{
+    margin-top:20px;
+    text-align:center;
+}
+
+.login-link a{
+    margin-left:8px;
+    text-decoration:none;
+    color:#2563eb;
+    font-weight:600;
+}
+
+@media(max-width:700px){
+
+.form-grid{
+
+grid-template-columns:1fr;
+
+}
+
+.register-card{
+
+width:100%;
+
+}
+
+}

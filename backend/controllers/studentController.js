@@ -1,17 +1,47 @@
 const Student = require("../models/Student");
 
-// Create Student
+// Register Student
 const createStudent = async (req, res) => {
   try {
-    const { name, age, gender, school, className, language } = req.body;
+    const {
+      name,
+      age,
+      gender,
+      school,
+      className,
+      language,
+      email,
+      password,
+    } = req.body;
 
     // Validation
-    if (!name || !age || !gender || !school || !className || !language) {
+    if (
+      !name ||
+      !age ||
+      !gender ||
+      !school ||
+      !className ||
+      !language ||
+      !email ||
+      !password
+    ) {
       return res.status(400).json({
+        success: false,
         message: "Please fill all required fields.",
       });
     }
 
+    // Check if email already exists
+    const existingStudent = await Student.findOne({ email });
+
+    if (existingStudent) {
+      return res.status(400).json({
+        success: false,
+        message: "Email already registered.",
+      });
+    }
+
+    // Create new student
     const student = await Student.create({
       name,
       age,
@@ -19,11 +49,21 @@ const createStudent = async (req, res) => {
       school,
       className,
       language,
+      email,
+      password,
     });
 
-    res.status(201).json(student);
+    res.status(201).json({
+      success: true,
+      message: "Student registered successfully.",
+      student,
+    });
+
   } catch (error) {
+    console.error(error);
+
     res.status(500).json({
+      success: false,
       message: error.message,
     });
   }
@@ -34,9 +74,17 @@ const getStudents = async (req, res) => {
   try {
     const students = await Student.find().sort({ createdAt: -1 });
 
-    res.status(200).json(students);
+    res.status(200).json({
+      success: true,
+      count: students.length,
+      students,
+    });
+
   } catch (error) {
+    console.error(error);
+
     res.status(500).json({
+      success: false,
       message: error.message,
     });
   }

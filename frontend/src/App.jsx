@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
 import StudentForm from "./pages/StudentForm";
-import Assessment from "./pages/Assessment";
 import ReadingAssessment from "./pages/ReadingAssessment";
 import WritingAssessment from "./pages/WritingAssessment";
 import Processing from "./pages/Processing";
@@ -13,29 +12,14 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Home */}
         <Route path="/" element={<Home />} />
-
-        {/* Student Registration */}
-        <Route path="/register" element={<StudentForm />} />
-
-        {/* Assessment */}
-        <Route path="/assessment" element={<Assessment />} />
-
-        {/* Reading Assessment */}
-        <Route path="/reading" element={<ReadingAssessment />} />
-
-        {/* Writing Assessment */}
-        <Route path="/writing" element={<WritingAssessment />} />
-
-        {/* AI Processing */}
-        <Route path="/processing" element={<Processing />} />
-
-        {/* Results */}
-        <Route path="/result" element={<Result />} />
-
-        {/* Dashboard */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/reading" element={<ReadingAssessment />} />
+        <Route path="/writing" element={<WritingAssessment />} />
+        <Route path="/processing" element={<Processing />} />
+        <Route path="/result" element={<Result />} />
       </Routes>
     </BrowserRouter>
   );
