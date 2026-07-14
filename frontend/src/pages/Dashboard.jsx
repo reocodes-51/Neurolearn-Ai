@@ -1,170 +1,130 @@
-import {
-  FaBookOpen,
-  FaPen,
-  FaChartLine,
-  FaClipboardCheck,
-  FaDownload,
-  FaPlay,
-} from "react-icons/fa";
-
-import StatsCard from "../components/dashboard/StatsCard";
-import Button from "../components/common/Button";
+import { Navigate, useNavigate } from "react-router-dom";
 import "../styles/Dashboard.css";
-import RecentAssessment from "../components/dashboard/RecentAssessment";
-import PerformanceChart from "../components/dashboard/PerformanceChart";
-import RiskMeter from "../components/dashboard/RiskMeter";
 
 function Dashboard() {
+  const navigate = useNavigate();
+
+  const token = localStorage.getItem("token");
+  const student = JSON.parse(localStorage.getItem("student"));
+
+  // Protect Dashboard
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("student");
+
+    navigate("/login");
+  };
+
   return (
-    <div className="dashboard-page">
-      <div className="dashboard-container">
+    <div className="dashboard">
 
-        {/* Header */}
+      {/* Header */}
+      <header className="dashboard-header">
+        <h1>🧠 NeuroLearn AI</h1>
 
-        <div className="dashboard-header">
-          <h1>👋 Welcome Back, Student</h1>
+        <button
+          className="logout-btn"
+          onClick={handleLogout}
+        >
+          Logout
+        </button>
+      </header>
+
+      {/* Welcome Section */}
+      <section className="welcome-card">
+        <h2>Welcome, {student?.name} 👋</h2>
+
+        <p>
+          Ready to continue your dyslexia assessment journey?
+        </p>
+      </section>
+
+      {/* Student Details */}
+      <section className="profile-card">
+
+        <h2>Student Information</h2>
+
+        <div className="profile-grid">
+
+          <div>
+            <strong>Name</strong>
+            <p>{student?.name}</p>
+          </div>
+
+          <div>
+            <strong>Email</strong>
+            <p>{student?.email}</p>
+          </div>
+
+          <div>
+            <strong>School</strong>
+            <p>{student?.school}</p>
+          </div>
+
+          <div>
+            <strong>Class</strong>
+            <p>{student?.className}</p>
+          </div>
+
+          <div>
+            <strong>Language</strong>
+            <p>{student?.language}</p>
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* Assessment Cards */}
+
+      <section className="assessment-section">
+
+        <div
+          className="assessment-card"
+          onClick={() => navigate("/reading")}
+        >
+          <h2>📖 Reading Assessment</h2>
 
           <p>
-            Track your learning progress and continue improving every day.
+            Evaluate reading ability using AI speech analysis.
           </p>
+
+          <button>Start Reading Test</button>
         </div>
 
-        {/* Statistics */}
+        <div
+          className="assessment-card"
+          onClick={() => navigate("/writing")}
+        >
+          <h2>✍ Writing Assessment</h2>
 
-        <div className="stats-grid">
+          <p>
+            Upload handwriting samples for AI analysis.
+          </p>
 
-          <StatsCard
-            title="Total Assessments"
-            value="12"
-            icon={<FaClipboardCheck />}
-            color="#2563eb"
-          />
-
-          <StatsCard
-            title="Reading Score"
-            value="88%"
-            icon={<FaBookOpen />}
-            color="#10b981"
-          />
-
-          <StatsCard
-            title="Writing Score"
-            value="84%"
-            icon={<FaPen />}
-            color="#f59e0b"
-          />
-
-          <StatsCard
-            title="Overall Progress"
-            value="90%"
-            icon={<FaChartLine />}
-            color="#8b5cf6"
-          />
-
+          <button>Start Writing Test</button>
         </div>
 
-        {/* Student Information */}
+      </section>
 
-        <div className="dashboard-card">
+      {/* Progress */}
 
-          <h2>Student Information</h2>
+      <section className="progress-card">
 
-          <div className="info-grid">
+        <h2>Assessment Status</h2>
 
-            <div>
-              <strong>Name</strong>
-              <p>Demo Student</p>
-            </div>
+        <p>Reading Assessment : Pending</p>
 
-            <div>
-              <strong>Age</strong>
-              <p>8 Years</p>
-            </div>
+        <p>Writing Assessment : Pending</p>
 
-            <div>
-              <strong>Class</strong>
-              <p>3</p>
-            </div>
+        <p>Risk Prediction : Not Generated</p>
 
-            <div>
-              <strong>School</strong>
-              <p>ABC Public School</p>
-            </div>
+      </section>
 
-          </div>
-
-        </div>
-
-        {/* AI Recommendations */}
-
-        <div className="dashboard-card">
-
-          <h2>AI Recommendations</h2>
-
-          <ul className="recommendation-list">
-
-            <li>📚 Practice letter recognition for 15 minutes daily.</li>
-
-            <li>✍ Improve handwriting consistency.</li>
-
-            <li>🔤 Practice confusing letters like b, d, p and q.</li>
-
-            <li>🎤 Read aloud for 10 minutes every day.</li>
-
-          </ul>
-
-        </div>
-
-        <div className="dashboard-card">
-
-        <h2>Recent Assessments</h2>
-
-        <RecentAssessment
-          date="10 July 2026"
-          status="Completed"
-        />
-
-        <RecentAssessment
-          date="05 July 2026"
-          status="Completed"
-        />
-
-        <RecentAssessment
-          date="28 June 2026"
-          status="Completed"
-        />
-
-      </div>
-
-      <PerformanceChart />
-
-      <RiskMeter risk="Low" percentage={35} />
-
-        {/* Quick Actions */}
-
-        <div className="dashboard-card">
-
-          <h2>Quick Actions</h2>
-
-          <div className="action-buttons">
-
-            <Button
-              text="▶ Start New Assessment"
-              variant="primary"
-              onClick={() => alert("Feature Coming Soon")}
-            />
-
-            <Button
-              text="⬇ Download Report"
-              variant="secondary"
-              onClick={() => alert("PDF Generation Coming Soon")}
-            />
-
-          </div>
-
-        </div>
-
-      </div>
     </div>
   );
 }
